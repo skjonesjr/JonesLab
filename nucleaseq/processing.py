@@ -45,6 +45,7 @@ def load_and_concat_dfs(dpath, label):
 
 
 def calculate_y0s_and_vks(
+    limit_of_counts,
     run_label,
     sample_names,
     cut_samples,
@@ -113,9 +114,10 @@ def calculate_y0s_and_vks(
         df = med_norm_perfect_target_tab.loc[:, cut_samples]
         perfect_final_fracs = []
         for index, row in df.iterrows():
-            y = np.array(row)
-            y /= y[0]
-            perfect_final_fracs.append(y[-1])
+            if y[0] >= limit_of_counts: 
+                y = np.array(row)
+                y /= y[0]
+                perfect_final_fracs.append(y[-1])
         exp_floor = np.median(perfect_final_fracs)
 
         def exponential(x, y0, vk):
